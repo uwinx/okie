@@ -84,6 +84,6 @@ class AsyncioConnectionController:
 
 
 async def call_with_timeout(future, timeout: float):
-    return asyncio.wait_for(
+    return await asyncio.wait_for(
         fut=future, timeout=timeout
     )

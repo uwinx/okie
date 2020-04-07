@@ -88,7 +88,8 @@ class Okie(asyncio.AsyncioConnectionController):
         """
 
         return await asyncio.call_with_timeout(
-            timeout=timeout or self.timeout, future=self._request(
+            timeout=timeout or self.timeout,
+            future=self._request(
                 method=method, url=url, data_builder=data_builder,
                 headers=headers,
             )
