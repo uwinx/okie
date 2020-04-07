@@ -1,5 +1,5 @@
 from .utils import encode_headers
-from ..typedefs import Headers
+from ..types import Headers
 
 from .form_data import FormDataBuilder
 
@@ -37,6 +37,13 @@ def make_binary_field(
 
 
 class MultipartBuilder(FormDataBuilder):
+    """
+    Similar to FormDataBuilder differs in specifying `content-type` and `filename`
+    attributes to okie-generated `content-disposition` header.
+
+    !!! todo "implement multipart subtypes"
+    """
+
     def add_binary_data(
         self,
         field_name: str,
@@ -45,7 +52,18 @@ class MultipartBuilder(FormDataBuilder):
         filename: str,
         content_type: str,
     ):
-        self.data.append(
+        """
+        Add partial binary field to intermediate.
+
+        ##### Parameters
+        - field_name: `str` - *field name*
+        - headers: `okie.types.Headers` - *headers for field*
+        - binary: `str` - *file's binary*
+        - filename: `str` - *name of posting file*
+        - content_type: `str` - *file mime-type*
+
+        """
+        self.intermediate.append(
             make_binary_field(
                 field_name=field_name,
                 boundary=self.boundary,

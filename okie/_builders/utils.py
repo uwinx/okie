@@ -1,4 +1,4 @@
-from ..typedefs import Headers
+from ..types import Headers
 
 
 def encode_headers(headers: Headers):

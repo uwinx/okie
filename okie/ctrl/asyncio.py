@@ -1,13 +1,21 @@
-from typing import Optional, Deque, Set, Any
+"""
+AsyncioConnectionController pools/manages streams with standard `asyncio` library.
+"""
+
+from typing import Optional, Deque, Set, Any, Tuple
 from contextlib import asynccontextmanager
 import asyncio
 from collections import deque
 
-from ..typedefs import AsyncioStreamType
-
 DEFAULT_SSL_HANDSHAKE_TIMEOUT = 60
 DEFAULT_HTTPS_PORT = 443
 DEFAULT_HTTP_PORT = 80
+
+
+AsyncioStreamType = Tuple[asyncio.StreamReader, asyncio.StreamWriter]
+"""
+Asyncio stream type; Pair of stream reader/writer
+"""
 
 
 async def close_stream(stream: AsyncioStreamType):
@@ -16,7 +24,7 @@ async def close_stream(stream: AsyncioStreamType):
     await w.wait_closed()
 
 
-class ConnectionController:
+class AsyncioConnectionController:
     def __init__(self, ssl_handshake_timeout: Optional[float] = None):
         self._connections_deque: Deque[Optional[AsyncioStreamType]] = deque()
         self._busy_connections: Set[Optional[AsyncioStreamType]] = set()
@@ -73,3 +81,9 @@ class ConnectionController:
 
         self._connections_deque = deque([None] * len(self._connections_deque))
         self._busy_connections.clear()
+
+
+async def call_with_timeout(future, timeout: float):
+    return asyncio.wait_for(
+        fut=future, timeout=timeout
+    )

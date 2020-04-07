@@ -1,5 +1,6 @@
 import asyncio
-from okie import Okie, FormURLEncodedBuilder
+
+from okie import Okie, FormURLEncodedBuilder, HttpRequestType
 
 
 async def main():
@@ -11,7 +12,7 @@ async def main():
         builder.add_field("key1", "value1")
 
     response = await okie.request(
-        "GET",
+        HttpRequestType.GET,
         url="http://httpbin.org/anything",
         data_builder=builder,
     )
@@ -32,7 +33,7 @@ async def main():
     )
 
     print(response.body.decode())
-    print(response.headers)
+    print({**response.headers})
 
 
 asyncio.run(main())

@@ -1,7 +1,6 @@
 from typing import Optional
 
-from .types import header_key as hk
-from .typedefs import Headers
+from .types import header_key as hk, Headers
 
 
 class Response:
@@ -23,6 +22,10 @@ class Response:
             setattr(self, slot, None)
 
     def __len__(self) -> int:
+        """
+        Gets the value content-length header
+        """
+
         if self._cnt_len != -1:
             return self._cnt_len
         return int(self.headers[hk("content-length")])
@@ -30,8 +33,9 @@ class Response:
 
 class HTProtocol:
     """
-    Http-Tools-Protocol
+    Http-Tools-Protocol. protocol for httptools parser. Part of non-public API.
     """
+
     def __init__(self):
         self.response = Response()
 
@@ -43,7 +47,7 @@ class HTProtocol:
         if self.response.headers:
             self.response.headers[k] = val
         else:
-            self.response.headers = {k: val}
+            self.response.headers = Headers({k: val})
 
     def on_body(self, body: bytes):
         self.response.body = body
